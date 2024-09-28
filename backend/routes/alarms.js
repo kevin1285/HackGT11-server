@@ -1,10 +1,32 @@
 const express = require('express');
 const router = express.Router();
+const Alarm = '../models/alarmModel';
 
-router.get('/', (req, res) => {
-    res.json({'msg': 'GET request for alarms'});
+//get all alarms
+router.get('/', async (req, res) => {
+    try {
+        const alarms = await Alarm.find().populate('patientId'); 
+        res.status(200).json(alarms);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching alarms' });
+    }
 });
 
+//get single alarm
+router.get('/:id', async (req, res) => {
+    try {
+        const alarm = await Alarm.findById(req.params.id).populate('patientId');
+        if (!alarm) {
+            return res.status(404).json({ error: 'Alarm not found' });
+        }
+        res.status(200).json(alarm);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching alarm' });
+    }
+});
+
+
+//add alarm
 router.post('/', async (req, res) => {
     try {
         const { description, priority, patientId, lastActionTaken, status } = req.body;
@@ -20,6 +42,35 @@ router.post('/', async (req, res) => {
         res.status(201).json(newAlarm);
     } catch (err) {
         res.status(400).json({ error: err });
+    }
+});
+
+//update alarm
+router.patch('/:id', async (req, res) => {
+    try {
+        const updates = req.body;
+        //new: true makes the method return the alarm after it was updaed
+        //runValidators: true applies mongoose schema validation
+        const alarm = await Alarm.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
+        if (!alarm) {
+            return res.status(404).json({ error: 'Alarm not found' });
+        }
+        res.status(200).json(alarm);
+    } catch (error) {
+        res.status(400).json({ error: 'Error updating alarm' });
+    }
+});
+
+//delete alarm
+router.delete('/:id', async (req, res) => {
+    try {
+        const alarm = await Alarm.findByIdAndDelete(req.params.id);
+        if (!alarm) {
+            return res.status(404).json({ error: 'Alarm not found' });
+        }
+        res.status(200).json({ message: 'Alarm deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error deleting alarm' });
     }
 });
 

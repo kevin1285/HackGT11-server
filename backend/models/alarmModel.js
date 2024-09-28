@@ -7,7 +7,7 @@ const alarmSchema = new mongoose.Schema({
     },
     priority: {
         type: String,
-        enum: ['low', 'medium', 'high'],
+        enum: ['low', 'high'],
         required: true
     },
     patientId: {
