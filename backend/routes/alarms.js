@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const Alarm = '../models/alarmModel';
+const Alarm = require('../models/alarmModel');
 
 //get all alarms
 router.get('/', async (req, res) => {
     try {
-        const alarms = await Alarm.find().populate('patientId'); 
+        const alarms = await Alarm.find(); 
         res.status(200).json(alarms);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching alarms' });
+    } catch (err) {
+        res.status(500).json({ error: err });
     }
 });
 
 //get single alarm
 router.get('/:id', async (req, res) => {
     try {
-        const alarm = await Alarm.findById(req.params.id).populate('patientId');
+        const alarm = await Alarm.findById(req.params.id);
         if (!alarm) {
             return res.status(404).json({ error: 'Alarm not found' });
         }

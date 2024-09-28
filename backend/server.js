@@ -1,15 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const alarmRoutes = require('./routes/alarms');
-
 require('dotenv').config();
 const app = express();
 
+const alarmRoutes = require('./routes/alarms');
+const userRoutes = require('./routes/users');
+
+
 //middleware
+app.use((req, res, next) => {
+    console.log(req.path, req.method);
+    next();
+});
+
 app.use(express.json());
 
 // routes
 app.use('/alarms', alarmRoutes);
+app.use('/users', userRoutes);
 
 app.get('/', (req, res) => {
     res.json({"msg":"hello world"});
@@ -17,7 +25,7 @@ app.get('/', (req, res) => {
 
 //connect to db
 const port = process.env.PORT || 3000;
-console.log(process.env.MONG_URI);
+
 mongoose.connect(process.env.MONG_URI)
     .then(() => {
         app.listen(port, () => {
