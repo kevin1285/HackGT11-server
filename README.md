@@ -8,8 +8,8 @@
    npm install
 
 3. **Configure environment variables**  
-   create a .env file and copy the following env variables:
-   MONG_URI = {find this in discord}
+   create a .env file and copy the following env variables:  
+   MONG_URI = {find this in discord}  
    PORT = 3000
 
 4. **Start the server**  
