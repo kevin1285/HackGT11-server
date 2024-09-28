@@ -5,7 +5,7 @@ const Alarm = require('../models/alarmModel');
 //get all alarms
 router.get('/', async (req, res) => {
     try {
-        const alarms = await Alarm.find(); 
+        const alarms = await Alarm.find().populate(""); 
         res.status(200).json(alarms);
     } catch (err) {
         res.status(500).json({ error: err });
@@ -29,11 +29,11 @@ router.get('/:id', async (req, res) => {
 //add alarm
 router.post('/', async (req, res) => {
     try {
-        const { description, priority, patientId, lastActionTaken, status } = req.body;
+        const { description, priority, userId, lastActionTaken, status } = req.body;
         const newAlarm = new Alarm({
             description,
             priority,
-            patientId,
+            userId,
             lastActionTaken,
             status
         });

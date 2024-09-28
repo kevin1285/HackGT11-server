@@ -10,7 +10,7 @@ const alarmSchema = new mongoose.Schema({
         enum: ['low', 'high'],
         required: true
     },
-    patientId: {
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
