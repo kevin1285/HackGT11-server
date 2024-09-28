@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const alarmRoutes = require('./routes/alarms');
 
+require('dotenv').config();
 const app = express();
 
 //middleware
@@ -16,9 +17,10 @@ app.get('/', (req, res) => {
 
 //connect to db
 const port = process.env.PORT || 3000;
-mongoose.connect(port)
+console.log(process.env.MONG_URI);
+mongoose.connect(process.env.MONG_URI)
     .then(() => {
-        app.listen(3000, () => {
+        app.listen(port, () => {
             console.log(`Conncted to db and listening on port ${port}`);
         });
     })
